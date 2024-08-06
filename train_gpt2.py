@@ -306,7 +306,7 @@ for i in range(50):
         import code; code.interact(local=locals())
     loss.backward()
     optimizer.step()
-    torch.mps.synchronize() # wait for the kernel to finish before measuring the time
+    torch.cuda.synchronize() # wait for the kernel to finish before measuring the time
     t1 = time.time()
     dt = (t1 - t0) * 1000 # in milliseconds
     tokens_per_sec = train_loader.B * train_loader.T / (t1 - t0) # number of tokens per second processed
