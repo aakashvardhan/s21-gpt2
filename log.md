@@ -350,3 +350,62 @@ step 47, loss: 6.99773645401001, time: 100.93 ms, tokens/sec: 10145.86
 step 48, loss: 7.155838489532471, time: 100.28 ms, tokens/sec: 10210.99
 step 49, loss: 7.094860076904297, time: 98.98 ms, tokens/sec: 10345.53
 ```
+
+
+Switched to cuda and trained the model with bf16 precision
+
+```
+Using device: cuda
+loaded 338025 tokens
+1 epoch = 20 batches
+step 0, loss: 10.823673248291016, time: 1134.84 ms, tokens/sec: 14437.23
+step 1, loss: 10.773681640625, time: 356.77 ms, tokens/sec: 45922.92
+step 2, loss: 10.696460723876953, time: 357.19 ms, tokens/sec: 45869.34
+step 3, loss: 10.645000457763672, time: 357.26 ms, tokens/sec: 45860.65
+step 4, loss: 10.569671630859375, time: 357.40 ms, tokens/sec: 45841.62
+step 5, loss: 10.504947662353516, time: 357.14 ms, tokens/sec: 45875.99
+step 6, loss: 10.413402557373047, time: 357.67 ms, tokens/sec: 45807.24
+step 7, loss: 10.330463409423828, time: 357.32 ms, tokens/sec: 45852.72
+step 8, loss: 10.247501373291016, time: 357.23 ms, tokens/sec: 45864.41
+step 9, loss: 10.140941619873047, time: 357.51 ms, tokens/sec: 45828.66
+step 10, loss: 10.052009582519531, time: 357.21 ms, tokens/sec: 45866.13
+step 11, loss: 9.951866149902344, time: 357.03 ms, tokens/sec: 45890.26
+step 12, loss: 9.854114532470703, time: 357.28 ms, tokens/sec: 45857.96
+step 13, loss: 9.764053344726562, time: 357.18 ms, tokens/sec: 45870.93
+step 14, loss: 9.674781799316406, time: 357.17 ms, tokens/sec: 45871.21
+step 15, loss: 9.562599182128906, time: 357.27 ms, tokens/sec: 45858.48
+step 16, loss: 9.468391418457031, time: 357.30 ms, tokens/sec: 45854.99
+step 17, loss: 9.35312271118164, time: 357.74 ms, tokens/sec: 45798.36
+step 18, loss: 9.262325286865234, time: 357.42 ms, tokens/sec: 45839.27
+step 19, loss: 9.13851547241211, time: 357.23 ms, tokens/sec: 45864.57
+step 20, loss: 8.955394744873047, time: 357.56 ms, tokens/sec: 45821.60
+step 21, loss: 8.789409637451172, time: 357.03 ms, tokens/sec: 45889.50
+step 22, loss: 8.691314697265625, time: 357.08 ms, tokens/sec: 45883.31
+step 23, loss: 8.581092834472656, time: 357.49 ms, tokens/sec: 45830.49
+step 24, loss: 8.462684631347656, time: 357.12 ms, tokens/sec: 45878.71
+step 25, loss: 8.405288696289062, time: 357.33 ms, tokens/sec: 45851.41
+step 26, loss: 8.302326202392578, time: 357.26 ms, tokens/sec: 45860.50
+step 27, loss: 8.14952278137207, time: 357.28 ms, tokens/sec: 45857.04
+step 28, loss: 8.056644439697266, time: 356.81 ms, tokens/sec: 45917.98
+step 29, loss: 7.8988800048828125, time: 357.41 ms, tokens/sec: 45840.61
+step 30, loss: 7.821723937988281, time: 357.38 ms, tokens/sec: 45844.86
+step 31, loss: 7.720935821533203, time: 357.18 ms, tokens/sec: 45871.06
+step 32, loss: 7.626550674438477, time: 357.45 ms, tokens/sec: 45835.57
+step 33, loss: 7.547266006469727, time: 357.25 ms, tokens/sec: 45861.66
+step 34, loss: 7.512643814086914, time: 357.30 ms, tokens/sec: 45855.51
+step 35, loss: 7.381616592407227, time: 357.25 ms, tokens/sec: 45862.06
+step 36, loss: 7.321258544921875, time: 357.31 ms, tokens/sec: 45853.12
+step 37, loss: 7.258335113525391, time: 357.26 ms, tokens/sec: 45860.50
+step 38, loss: 7.184694290161133, time: 357.33 ms, tokens/sec: 45851.47
+step 39, loss: 7.07536506652832, time: 357.48 ms, tokens/sec: 45831.41
+step 40, loss: 7.057899475097656, time: 357.19 ms, tokens/sec: 45868.76
+step 41, loss: 6.868068695068359, time: 357.48 ms, tokens/sec: 45831.81
+step 42, loss: 6.851839065551758, time: 357.54 ms, tokens/sec: 45824.59
+step 43, loss: 6.777135848999023, time: 357.56 ms, tokens/sec: 45821.14
+step 44, loss: 6.7092742919921875, time: 357.35 ms, tokens/sec: 45849.14
+step 45, loss: 6.828512191772461, time: 357.37 ms, tokens/sec: 45846.02
+step 46, loss: 6.846490859985352, time: 357.54 ms, tokens/sec: 45824.26
+step 47, loss: 6.715211868286133, time: 357.35 ms, tokens/sec: 45848.62
+step 48, loss: 6.6649169921875, time: 357.41 ms, tokens/sec: 45840.64
+step 49, loss: 6.530155181884766, time: 357.32 ms, tokens/sec: 45853.00
+```

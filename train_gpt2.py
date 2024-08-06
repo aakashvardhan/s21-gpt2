@@ -292,6 +292,8 @@ torch.set_float32_matmul_precision('high')
 
 model = GPT(GPTConfig())
 model.to(device)
+model = torch.compile(model)
+# Speedup mainly comes from reducing python overhead and GPU read/write overhead
 # logits, loss = model(x, y)
 
 # print(loss)  # (B, T, vocab_size) = (4, 32, 50257)
