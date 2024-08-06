@@ -286,7 +286,7 @@ elif hasattr(torch, "mps") and torch.backends.mps.is_available():
     torch.mps.manual_seed(1337)
 
 # get a data batch
-train_loader = DataLoaderLite(4,256)
+train_loader = DataLoaderLite(16,1024)
 torch.set_float32_matmul_precision('high')
 # the exponent sets the precision of the matrix multiplication
 
@@ -295,7 +295,7 @@ model.to(device)
 # logits, loss = model(x, y)
 
 # print(loss)  # (B, T, vocab_size) = (4, 32, 50257)
-optimizer = torch.optim.AdamW(model.parameters(), lr=9e-3)
+optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
 for i in range(50):
     t0 = time.time()
     x, y = train_loader.next_batch()
@@ -303,7 +303,7 @@ for i in range(50):
     optimizer.zero_grad()
     with torch.autocast(device_type=device, dtype=torch.bfloat16):
         logits, loss = model(x, y)
-        import code; code.interact(local=locals())
+        # import code; code.interact(local=locals())
     loss.backward()
     optimizer.step()
     torch.cuda.synchronize() # wait for the kernel to finish before measuring the time
