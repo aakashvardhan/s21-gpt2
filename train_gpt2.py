@@ -295,7 +295,7 @@ model.to(device)
 # logits, loss = model(x, y)
 
 # print(loss)  # (B, T, vocab_size) = (4, 32, 50257)
-optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4)
+optimizer = torch.optim.AdamW(model.parameters(), lr=9e-3)
 for i in range(50):
     t0 = time.time()
     x, y = train_loader.next_batch()
