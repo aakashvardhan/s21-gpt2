@@ -315,7 +315,7 @@ model = torch.compile(model)
 # Speedup mainly comes from reducing python overhead and GPU read/write overhead
 # logits, loss = model(x, y)
 
-max_lr = 6e-4 # used lr from gpt3-small as a reference
+max_lr = 6e-4  # used lr from gpt3-small as a reference
 min_lr = max_lr * 0.1
 warmup_steps = 10
 max_steps = 50
@@ -360,7 +360,7 @@ for step in range(max_steps):
     tokens_processed = train_loader.B * train_loader.T
     tokens_per_sec = tokens_processed / dt
     print(
-        f"step {step:.4d}, loss: {loss.item():.6f}, norm: {norm}, lr: {lr:.4e}, time: {dt*1000:.1f}ms, tokens/sec: {tokens_per_sec:.1f}"
+        f"step {step:04d}, loss: {loss.item():.6f}, norm: {norm}, lr: {lr:.4e}, time: {dt*1000:.1f}ms, tokens/sec: {tokens_per_sec:.1f}"
     )
 
 import sys
