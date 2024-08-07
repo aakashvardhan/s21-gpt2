@@ -353,7 +353,7 @@ model = torch.compile(model)
 max_lr = 6e-4  # used lr from gpt3-small as a reference
 min_lr = max_lr * 0.1
 warmup_steps = 10
-max_steps = 4000
+max_steps = 5000
 
 
 def get_lr(it):
