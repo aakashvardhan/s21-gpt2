@@ -53,3 +53,13 @@ This is a tiny GPT-2 model trained on Shakespeare's works. It is a smaller versi
   - Synchronize GPU to wait for model to finish training at tf32 precision
 - [x] Calculating the number of tokens processed per second
   - Measures training efficiency and throughput
+
+## Training Logs
+
+Check out the training logs [here](https://github.com/aakashvardhan/s21-gpt2/blob/main/log.md).
+
+## Hugging Face Spaces
+
+Check out the Hugging Face Spaces [Tiny Shakespeare GPT-2](https://huggingface.co/spaces/aakashv100/gpt2-karpathy).
+
+![Tiny Shakespeare GPT-2](https://github.com/aakashvardhan/s21-gpt2/blob/main/asset/Screenshot%202024-08-07%20at%2011.24.54%E2%80%AFPM.png)
