@@ -4,6 +4,7 @@ import torch.nn as nn
 from torch.nn import functional as F
 import math
 import tiktoken
+import inspect
 
 # --------------------------------------------------------------------------------------------------------
 
@@ -249,6 +250,36 @@ class GPT(nn.Module):
 
         return model
 
+    def configure_optimizers(self, weight_decay, learning_rate, device):
+        # start with all of the candidate parameters (that require gradients)
+        param_dict = {pn: p for pn, p in self.named_parameters()}
+        param_dict = {pn: p for pn, p in param_dict.items() if p.requires_grad}
+        # create optim groups. Any parameters that is 2D will be weight decayed, otherwise no weight decay
+        # i.e, all weight tensors in matmuls + embeddings decay, all biases,layernorm and 1d tensor params do not decay
+        # 1D are not decayed as per the GPT-3 paper
+        decay_params = [p for n, p in param_dict.items() if p.dim() >= 2]
+        nodecay_params = [p for n, p in param_dict.items() if p.dim() < 2]
+        optim_groups = [
+            {"params": decay_params, "weight_decay": weight_decay},
+            {"params": nodecay_params, "weight_decay": 0.0},
+        ]
+        num_decay_params = sum(p.numel() for p in decay_params)
+        num_nodecay_params = sum(p.numel() for p in nodecay_params)
+        print(
+            f"num decayed parameter tensors: {len(decay_params)}, with {num_decay_params:,} parameters"
+        )
+        print(
+            f"num non-decayed parameter tensors: {len(nodecay_params)}, with {num_nodecay_params:,} parameters"
+        )
+        # Create AdamW optimizer and use the fused version if it is available
+        fused_available = "fused" in inspect.signature(torch.optim.AdamW).parameters
+        use_fused = fused_available and "cuda" in device
+        print(f"using fused AdamW: {use_fused}")
+        optimizer = torch.optim.AdamW(
+            optim_groups, lr=learning_rate, betas=(0.9, 0.95), eps=1e-8, fused=use_fused
+        )
+        return optimizer
+
 
 # --------------------------------------------------------------------------------------------------------
 num_return_sequences = 5
@@ -273,6 +304,9 @@ class DataLoaderLite:
         self.current_position = 0
 
     def next_batch(self):
+        # Data are sampled without replacement
+        # during training (until an epoch boundary is reached)
+        # to minimize overfitting - (Cited from the GPT-3 paper)
         B, T = self.B, self.T
         buf = self.tokens[self.current_position : self.current_position + B * T + 1]
         x = buf[:-1].view(B, T)  # (B, T)
@@ -315,7 +349,7 @@ model = torch.compile(model)
 # Speedup mainly comes from reducing python overhead and GPU read/write overhead
 # logits, loss = model(x, y)
 
-max_lr = 9e-2  # used lr from gpt3-small as a reference
+max_lr = 6e-4  # used lr from gpt3-small as a reference
 min_lr = max_lr * 0.1
 warmup_steps = 10
 max_steps = 50
@@ -338,8 +372,8 @@ def get_lr(it):
 
 
 # print(loss)  # (B, T, vocab_size) = (4, 32, 50257)
-optimizer = torch.optim.AdamW(model.parameters(), lr=9e-2, betas=(0.9, 0.95), eps=1e-8)
-
+# optimizer = torch.optim.AdamW(model.parameters(), lr=9e-2, betas=(0.9, 0.95), eps=1e-8)
+optimizer = model.configure_optimizers(weight_decay=0.1, learning_rate=6e-4, device=device)
 for step in range(max_steps):
     t0 = time.time()
     x, y = train_loader.next_batch()

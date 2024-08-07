@@ -656,3 +656,62 @@ step 47, loss: 6.74720573425293, norm: 0.5526,  time: 110.85 ms, tokens/sec: 147
 step 48, loss: 6.703516006469727, norm: 0.5820,  time: 111.22 ms, tokens/sec: 147318.11
 step 49, loss: 6.559877395629883, norm: 0.5682,  time: 111.23 ms, tokens/sec: 147298.84
 ```
+
+
+Added lr scheduler: warmup + cosine decay
+
+```
+Using device: cuda
+loaded 338025 tokens
+1 epoch = 20 batches
+step 0000, loss: 10.826412, norm: 0.6931984424591064, lr: 9.0000e-03, time: 19439.9ms, tokens/sec: 842.8
+step 0001, loss: 10.751480, norm: 0.42690765857696533, lr: 1.8000e-02, time: 111.1ms, tokens/sec: 147478.1
+step 0002, loss: 10.628860, norm: 0.48221123218536377, lr: 2.7000e-02, time: 110.9ms, tokens/sec: 147794.6
+step 0003, loss: 10.407417, norm: 0.463195264339447, lr: 3.6000e-02, time: 110.8ms, tokens/sec: 147812.7
+step 0004, loss: 10.055042, norm: 0.5793614983558655, lr: 4.5000e-02, time: 110.5ms, tokens/sec: 148300.5
+step 0005, loss: 9.619484, norm: 0.6895613074302673, lr: 5.4000e-02, time: 110.9ms, tokens/sec: 147744.7
+step 0006, loss: 9.034550, norm: 0.8040285706520081, lr: 6.3000e-02, time: 111.2ms, tokens/sec: 147326.0
+step 0007, loss: 8.325083, norm: 0.8534300923347473, lr: 7.2000e-02, time: 111.3ms, tokens/sec: 147178.3
+step 0008, loss: 7.851295, norm: 0.7141491770744324, lr: 8.1000e-02, time: 111.1ms, tokens/sec: 147447.7
+step 0009, loss: 7.314989, norm: 0.5947524905204773, lr: 9.0000e-02, time: 110.5ms, tokens/sec: 148241.9
+step 0010, loss: 7.055563, norm: 0.5831095576286316, lr: 9.0000e-02, time: 111.0ms, tokens/sec: 147647.0
+step 0011, loss: 6.938021, norm: 0.6088063716888428, lr: 8.9875e-02, time: 110.7ms, tokens/sec: 147964.6
+step 0012, loss: 6.964191, norm: 0.7119380235671997, lr: 8.9501e-02, time: 110.7ms, tokens/sec: 148014.6
+step 0013, loss: 7.345110, norm: 0.8814757466316223, lr: 8.8881e-02, time: 111.3ms, tokens/sec: 147169.2
+step 0014, loss: 7.384396, norm: 1.052160620689392, lr: 8.8018e-02, time: 111.2ms, tokens/sec: 147390.8
+step 0015, loss: 6.978559, norm: 0.8308965563774109, lr: 8.6917e-02, time: 110.9ms, tokens/sec: 147710.1
+step 0016, loss: 6.813705, norm: 0.24728883802890778, lr: 8.5586e-02, time: 112.9ms, tokens/sec: 145163.1
+step 0017, loss: 6.931856, norm: 0.9049839973449707, lr: 8.4032e-02, time: 111.1ms, tokens/sec: 147522.7
+step 0018, loss: 6.835580, norm: 0.23434652388095856, lr: 8.2265e-02, time: 110.5ms, tokens/sec: 148269.8
+step 0019, loss: 6.683662, norm: 0.5258808732032776, lr: 8.0296e-02, time: 110.8ms, tokens/sec: 147925.4
+step 0020, loss: 6.697766, norm: 0.6825177669525146, lr: 7.8138e-02, time: 110.6ms, tokens/sec: 148136.8
+step 0021, loss: 6.373252, norm: 0.3320836126804352, lr: 7.5803e-02, time: 111.2ms, tokens/sec: 147311.5
+step 0022, loss: 6.496826, norm: 0.15733486413955688, lr: 7.3305e-02, time: 110.8ms, tokens/sec: 147897.4
+step 0023, loss: 6.513688, norm: 0.3410082161426544, lr: 7.0661e-02, time: 110.8ms, tokens/sec: 147931.8
+step 0024, loss: 6.446793, norm: 0.38688433170318604, lr: 6.7887e-02, time: 111.0ms, tokens/sec: 147612.7
+step 0025, loss: 6.667426, norm: 0.21515081822872162, lr: 6.4999e-02, time: 111.0ms, tokens/sec: 147614.6
+step 0026, loss: 6.742461, norm: 0.28673750162124634, lr: 6.2015e-02, time: 111.2ms, tokens/sec: 147313.1
+step 0027, loss: 6.607069, norm: 0.3091992139816284, lr: 5.8955e-02, time: 110.6ms, tokens/sec: 148107.4
+step 0028, loss: 6.498808, norm: 0.2593275308609009, lr: 5.5836e-02, time: 110.8ms, tokens/sec: 147892.9
+step 0029, loss: 6.399414, norm: 0.19373294711112976, lr: 5.2678e-02, time: 110.9ms, tokens/sec: 147769.5
+step 0030, loss: 6.446830, norm: 0.19413258135318756, lr: 4.9500e-02, time: 110.9ms, tokens/sec: 147745.4
+step 0031, loss: 6.478060, norm: 0.18588887155056, lr: 4.6322e-02, time: 110.7ms, tokens/sec: 147965.2
+step 0032, loss: 6.406878, norm: 0.20154334604740143, lr: 4.3164e-02, time: 111.2ms, tokens/sec: 147339.3
+step 0033, loss: 6.448103, norm: 0.15755431354045868, lr: 4.0045e-02, time: 111.3ms, tokens/sec: 147146.2
+step 0034, loss: 6.533960, norm: 0.1660446971654892, lr: 3.6985e-02, time: 112.0ms, tokens/sec: 146341.5
+step 0035, loss: 6.422695, norm: 0.12295912951231003, lr: 3.4001e-02, time: 111.4ms, tokens/sec: 147069.3
+step 0036, loss: 6.430028, norm: 0.16540755331516266, lr: 3.1113e-02, time: 110.4ms, tokens/sec: 148411.0
+step 0037, loss: 6.455245, norm: 0.1571657657623291, lr: 2.8339e-02, time: 110.8ms, tokens/sec: 147897.4
+step 0038, loss: 6.443198, norm: 0.14062438905239105, lr: 2.5695e-02, time: 110.9ms, tokens/sec: 147683.5
+step 0039, loss: 6.317459, norm: 0.14517810940742493, lr: 2.3197e-02, time: 110.7ms, tokens/sec: 148018.1
+step 0040, loss: 6.430545, norm: 0.12309756875038147, lr: 2.0862e-02, time: 110.9ms, tokens/sec: 147789.2
+step 0041, loss: 6.227926, norm: 0.25568655133247375, lr: 1.8704e-02, time: 110.9ms, tokens/sec: 147710.8
+step 0042, loss: 6.329395, norm: 0.1716519594192505, lr: 1.6735e-02, time: 111.3ms, tokens/sec: 147182.4
+step 0043, loss: 6.269663, norm: 0.16070039570331573, lr: 1.4968e-02, time: 111.0ms, tokens/sec: 147582.9
+step 0044, loss: 6.224435, norm: 0.15914437174797058, lr: 1.3414e-02, time: 110.9ms, tokens/sec: 147796.9
+step 0045, loss: 6.406736, norm: 0.09185631573200226, lr: 1.2083e-02, time: 110.7ms, tokens/sec: 147964.9
+step 0046, loss: 6.525551, norm: 0.15143220126628876, lr: 1.0982e-02, time: 110.7ms, tokens/sec: 147988.8
+step 0047, loss: 6.418638, norm: 0.1197434589266777, lr: 1.0119e-02, time: 110.8ms, tokens/sec: 147922.5
+step 0048, loss: 6.349893, norm: 0.07694002985954285, lr: 9.4986e-03, time: 111.3ms, tokens/sec: 147139.9
+step 0049, loss: 6.252887, norm: 0.10402383655309677, lr: 9.1248e-03, time: 111.2ms, tokens/sec: 147364.9
+```
