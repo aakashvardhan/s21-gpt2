@@ -90,7 +90,8 @@ class MLP(nn.Module):
         self.c_proj.NANOGPT_SCALE_INIT = 1
 
     def forward(self, x):
-        x = self.gelu(self.c_fc(x))
+        x = self.c_fc(x)
+        x = self.gelu(x)
         x = self.c_proj(x)
         return x
 
@@ -116,9 +117,9 @@ class GPTConfig:
     vocab_size: int = (
         50257  # number of tokens: 50,000 BPE merges + 256 bytes tokens + 1 <|endoftext|> token which delimits the end of a text
     )
-    n_layers: int = 6  # number of layers
-    n_head: int = 6  # number of heads
-    n_embd: int = 6  # embedding dimension
+    n_layers: int = 12  # number of layers
+    n_head: int = 12  # number of heads
+    n_embd: int = 768  # embedding dimension
 
 
 class GPT(nn.Module):
