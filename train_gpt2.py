@@ -315,7 +315,7 @@ model = torch.compile(model)
 # Speedup mainly comes from reducing python overhead and GPU read/write overhead
 # logits, loss = model(x, y)
 
-max_lr = 6e-4  # used lr from gpt3-small as a reference
+max_lr = 9e-2  # used lr from gpt3-small as a reference
 min_lr = max_lr * 0.1
 warmup_steps = 10
 max_steps = 50
@@ -338,7 +338,7 @@ def get_lr(it):
 
 
 # print(loss)  # (B, T, vocab_size) = (4, 32, 50257)
-optimizer = torch.optim.AdamW(model.parameters(), lr=3e-4, betas=(0.9, 0.95), eps=1e-8)
+optimizer = torch.optim.AdamW(model.parameters(), lr=9e-2, betas=(0.9, 0.95), eps=1e-8)
 
 for step in range(max_steps):
     t0 = time.time()
