@@ -715,3 +715,75 @@ step 0047, loss: 6.418638, norm: 0.1197434589266777, lr: 1.0119e-02, time: 110.8
 step 0048, loss: 6.349893, norm: 0.07694002985954285, lr: 9.4986e-03, time: 111.3ms, tokens/sec: 147139.9
 step 0049, loss: 6.252887, norm: 0.10402383655309677, lr: 9.1248e-03, time: 111.2ms, tokens/sec: 147364.9
 ```
+
+Changed n_layers from 6 to 12, n_head from 6 to 12, n_embd from 6 to 768
+
+added configure_optimizer method for weight decaying 2d tensor(matmul + embedding) while keeping 1d tensors (bias) un-decayed. Fused AdamW is used for the optimizer. Fused implementation of AdamW is used to reduce the number of kernel launches and memory transfers. This implementation is faster than the non-fused implementation.
+
+changed the lr and max_lr from 9e-2 to 6e-4 from gpt-2 paper
+
+[Comments: These significant changes from made due to the fact that I didnt notice that n_layers, n_head, n_embd were not changed from the default values.]
+
+```
+Using device: cuda
+loaded 338025 tokens
+1 epoch = 20 batches
+num decayed parameter tensors: 50, with 124,354,560 parameters
+num non-decayed parameter tensors: 98, with 121,344 parameters
+using fused AdamW: True
+step 0000, loss: 10.947460, norm: 28.572704315185547, lr: 6.0000e-05, time: 35546.6ms, tokens/sec: 460.9
+step 0001, loss: 9.502844, norm: 10.649986267089844, lr: 1.2000e-04, time: 452.6ms, tokens/sec: 36200.1
+step 0002, loss: 9.249768, norm: 7.303641319274902, lr: 1.8000e-04, time: 468.3ms, tokens/sec: 34985.0
+step 0003, loss: 9.762304, norm: 6.670114040374756, lr: 2.4000e-04, time: 476.3ms, tokens/sec: 34397.6
+step 0004, loss: 9.103415, norm: 4.245182037353516, lr: 3.0000e-04, time: 467.1ms, tokens/sec: 35077.5
+step 0005, loss: 8.795870, norm: 3.2649338245391846, lr: 3.6000e-04, time: 476.1ms, tokens/sec: 34411.0
+step 0006, loss: 8.586050, norm: 2.3858466148376465, lr: 4.2000e-04, time: 470.5ms, tokens/sec: 34821.0
+step 0007, loss: 8.263908, norm: 2.0477559566497803, lr: 4.8000e-04, time: 470.1ms, tokens/sec: 34855.0
+step 0008, loss: 7.888760, norm: 2.216733694076538, lr: 5.4000e-04, time: 471.2ms, tokens/sec: 34770.3
+step 0009, loss: 7.519494, norm: 2.1447815895080566, lr: 6.0000e-04, time: 468.7ms, tokens/sec: 34959.5
+step 0010, loss: 7.147041, norm: 1.8237965106964111, lr: 6.0000e-04, time: 473.3ms, tokens/sec: 34619.8
+step 0011, loss: 6.892460, norm: 1.262168526649475, lr: 5.9917e-04, time: 474.0ms, tokens/sec: 34567.0
+step 0012, loss: 6.612738, norm: 1.0810590982437134, lr: 5.9668e-04, time: 471.8ms, tokens/sec: 34727.3
+step 0013, loss: 6.652248, norm: 1.2052723169326782, lr: 5.9254e-04, time: 474.3ms, tokens/sec: 34540.9
+step 0014, loss: 6.673973, norm: 1.0830035209655762, lr: 5.8679e-04, time: 475.6ms, tokens/sec: 34452.7
+step 0015, loss: 6.526567, norm: 1.8632766008377075, lr: 5.7945e-04, time: 474.6ms, tokens/sec: 34518.5
+step 0016, loss: 6.533817, norm: 1.1444685459136963, lr: 5.7057e-04, time: 474.3ms, tokens/sec: 34547.0
+step 0017, loss: 6.534822, norm: 1.110831618309021, lr: 5.6021e-04, time: 476.1ms, tokens/sec: 34412.1
+step 0018, loss: 6.563293, norm: 1.056783676147461, lr: 5.4843e-04, time: 478.7ms, tokens/sec: 34227.1
+step 0019, loss: 6.383988, norm: 1.7206623554229736, lr: 5.3531e-04, time: 481.4ms, tokens/sec: 34031.9
+step 0020, loss: 6.512636, norm: 1.6860764026641846, lr: 5.2092e-04, time: 481.5ms, tokens/sec: 34027.5
+step 0021, loss: 6.216399, norm: 1.319534420967102, lr: 5.0535e-04, time: 477.8ms, tokens/sec: 34290.3
+step 0022, loss: 6.297939, norm: 1.5855876207351685, lr: 4.8870e-04, time: 481.8ms, tokens/sec: 34003.8
+step 0023, loss: 6.209799, norm: 1.4742878675460815, lr: 4.7107e-04, time: 478.9ms, tokens/sec: 34215.2
+step 0024, loss: 6.109917, norm: 1.2690263986587524, lr: 4.5258e-04, time: 480.9ms, tokens/sec: 34068.9
+step 0025, loss: 6.329908, norm: 0.9747611284255981, lr: 4.3332e-04, time: 479.0ms, tokens/sec: 34202.5
+step 0026, loss: 6.410453, norm: 1.0190460681915283, lr: 4.1343e-04, time: 479.7ms, tokens/sec: 34156.2
+step 0027, loss: 6.277285, norm: 1.2742353677749634, lr: 3.9303e-04, time: 480.5ms, tokens/sec: 34100.7
+step 0028, loss: 6.180765, norm: 0.9796109795570374, lr: 3.7224e-04, time: 487.1ms, tokens/sec: 33638.6
+step 0029, loss: 6.080741, norm: 0.7492642998695374, lr: 3.5118e-04, time: 485.4ms, tokens/sec: 33755.1
+step 0030, loss: 6.057111, norm: 0.8766511678695679, lr: 3.3000e-04, time: 482.9ms, tokens/sec: 33927.6
+step 0031, loss: 6.047297, norm: 1.1026291847229004, lr: 3.0882e-04, time: 485.1ms, tokens/sec: 33773.2
+step 0032, loss: 5.972584, norm: 0.8711676597595215, lr: 2.8776e-04, time: 481.6ms, tokens/sec: 34022.3
+step 0033, loss: 6.122845, norm: 0.8771983981132507, lr: 2.6697e-04, time: 481.6ms, tokens/sec: 34018.9
+step 0034, loss: 6.248235, norm: 0.9961901307106018, lr: 2.4657e-04, time: 482.8ms, tokens/sec: 33935.5
+step 0035, loss: 6.111196, norm: 0.846855878829956, lr: 2.2668e-04, time: 485.6ms, tokens/sec: 33738.3
+step 0036, loss: 6.053177, norm: 0.8354491591453552, lr: 2.0742e-04, time: 486.4ms, tokens/sec: 33684.4
+step 0037, loss: 6.056391, norm: 0.7657544016838074, lr: 1.8893e-04, time: 484.6ms, tokens/sec: 33805.9
+step 0038, loss: 6.064696, norm: 0.9178728461265564, lr: 1.7130e-04, time: 483.0ms, tokens/sec: 33924.1
+step 0039, loss: 5.934648, norm: 1.0021353960037231, lr: 1.5465e-04, time: 487.8ms, tokens/sec: 33588.1
+step 0040, loss: 6.139217, norm: 0.7321503162384033, lr: 1.3908e-04, time: 486.9ms, tokens/sec: 33649.3
+step 0041, loss: 5.885147, norm: 0.9714481830596924, lr: 1.2469e-04, time: 488.4ms, tokens/sec: 33545.7
+step 0042, loss: 6.020300, norm: 0.7538166642189026, lr: 1.1157e-04, time: 488.4ms, tokens/sec: 33545.4
+step 0043, loss: 5.873739, norm: 0.6751667857170105, lr: 9.9787e-05, time: 488.4ms, tokens/sec: 33543.8
+step 0044, loss: 5.816883, norm: 0.660638153553009, lr: 8.9428e-05, time: 488.8ms, tokens/sec: 33520.4
+step 0045, loss: 6.016191, norm: 0.8141545653343201, lr: 8.0553e-05, time: 489.8ms, tokens/sec: 33452.0
+step 0046, loss: 6.145385, norm: 0.7768596410751343, lr: 7.3215e-05, time: 489.4ms, tokens/sec: 33479.5
+step 0047, loss: 6.035873, norm: 0.7727654576301575, lr: 6.7460e-05, time: 490.6ms, tokens/sec: 33394.9
+step 0048, loss: 5.973330, norm: 0.5625572204589844, lr: 6.3324e-05, time: 489.6ms, tokens/sec: 33464.4
+step 0049, loss: 5.888381, norm: 0.648847222328186, lr: 6.0832e-05, time: 492.5ms, tokens/sec: 33264.1
+```
+
+
+Final model training with 4000 steps
+
+```

@@ -353,7 +353,7 @@ model = torch.compile(model)
 max_lr = 6e-4  # used lr from gpt3-small as a reference
 min_lr = max_lr * 0.1
 warmup_steps = 10
-max_steps = 50
+max_steps = 4000
 
 
 def get_lr(it):
@@ -391,12 +391,17 @@ for step in range(max_steps):
     optimizer.step()
     torch.cuda.synchronize()
     t1 = time.time()
-    dt = t1 - t0
+    dt = (t1 - t0) * 1000
     tokens_processed = train_loader.B * train_loader.T
-    tokens_per_sec = tokens_processed / dt
+    tokens_per_sec = tokens_processed / (t1 - t0)
     print(
-        f"step {step:04d}, loss: {loss.item():.6f}, norm: {norm}, lr: {lr:.4e}, time: {dt*1000:.1f}ms, tokens/sec: {tokens_per_sec:.1f}"
+        f"step {step:04d}, loss: {loss.item():.6f}, norm: {norm}, lr: {lr:.4e}, time: {dt:.2f}ms, tokens/sec: {tokens_per_sec:.1f}"
     )
+
+
+
+print(loss)
+torch.save(model.state_dict(), 'gpt2_saved_model.pt')
 
 import sys
 
