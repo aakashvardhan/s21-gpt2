@@ -594,3 +594,65 @@ step 49, loss: 6.501094818115234, time: 111.25 ms, tokens/sec: 147274.54
 
 
 Extra memory is required for the model training with the increased vocab size. The model training time is reduced by 11% compared to the previous model training with Flash Attention.
+
+
+
+Adding beta values (0.9, 0.95) and epsilon value (1e-8) to the Adam optimizer. B1 of 0.9 makes the optimizer to consider the past gradients more than the current gradients. B2 of 0.95 makes the optimizer to consider the past squared gradients more than the current squared gradients. Epsilon value of 1e-8 is added to avoid division by zero in order to maintain numerical stability.
+
+Additionally, gradient clipping of norm 1.0 is added to the model training to avoid exploding gradients.
+
+```
+Using device: cuda
+loaded 338025 tokens
+1 epoch = 20 batches
+step 0, loss: 10.826412200927734, norm: 0.6932,  time: 45553.03 ms, tokens/sec: 359.67
+step 1, loss: 10.751480102539062, norm: 0.4269,  time: 111.25 ms, tokens/sec: 147274.54
+step 2, loss: 10.68719482421875, norm: 0.4010,  time: 110.81 ms, tokens/sec: 147855.36
+step 3, loss: 10.62082290649414, norm: 0.4061,  time: 111.48 ms, tokens/sec: 146962.41
+step 4, loss: 10.541900634765625, norm: 0.4238,  time: 111.14 ms, tokens/sec: 147415.76
+step 5, loss: 10.465065002441406, norm: 0.4158,  time: 110.89 ms, tokens/sec: 147756.18
+step 6, loss: 10.371627807617188, norm: 0.4311,  time: 110.98 ms, tokens/sec: 147634.92
+step 7, loss: 10.273082733154297, norm: 0.4631,  time: 111.11 ms, tokens/sec: 147463.52
+step 8, loss: 10.192695617675781, norm: 0.5094,  time: 110.80 ms, tokens/sec: 147872.23
+step 9, loss: 10.08172607421875, norm: 0.5472,  time: 111.22 ms, tokens/sec: 147306.74
+step 10, loss: 9.980648040771484, norm: 0.5824,  time: 111.60 ms, tokens/sec: 146805.43
+step 11, loss: 9.869915008544922, norm: 0.6056,  time: 111.12 ms, tokens/sec: 147437.58
+step 12, loss: 9.766006469726562, norm: 0.6466,  time: 110.75 ms, tokens/sec: 147936.21
+step 13, loss: 9.676658630371094, norm: 0.6791,  time: 110.79 ms, tokens/sec: 147880.50
+step 14, loss: 9.59066390991211, norm: 0.6966,  time: 111.13 ms, tokens/sec: 147427.46
+step 15, loss: 9.47684097290039, norm: 0.7359,  time: 111.30 ms, tokens/sec: 147210.49
+step 16, loss: 9.383628845214844, norm: 0.7589,  time: 111.12 ms, tokens/sec: 147445.81
+step 17, loss: 9.27130126953125, norm: 0.7798,  time: 110.64 ms, tokens/sec: 148083.81
+step 18, loss: 9.184532165527344, norm: 0.7953,  time: 111.07 ms, tokens/sec: 147514.49
+step 19, loss: 9.06350326538086, norm: 0.8410,  time: 110.89 ms, tokens/sec: 147743.79
+step 20, loss: 8.881416320800781, norm: 0.8766,  time: 111.40 ms, tokens/sec: 147070.61
+step 21, loss: 8.704879760742188, norm: 0.9344,  time: 111.18 ms, tokens/sec: 147360.44
+step 22, loss: 8.615779876708984, norm: 0.9165,  time: 110.98 ms, tokens/sec: 147636.18
+step 23, loss: 8.50589370727539, norm: 0.9279,  time: 111.36 ms, tokens/sec: 147124.77
+step 24, loss: 8.390512466430664, norm: 0.9472,  time: 110.98 ms, tokens/sec: 147629.21
+step 25, loss: 8.35367202758789, norm: 0.9100,  time: 111.16 ms, tokens/sec: 147392.99
+step 26, loss: 8.260147094726562, norm: 0.8945,  time: 111.05 ms, tokens/sec: 147538.56
+step 27, loss: 8.116067886352539, norm: 0.9069,  time: 111.40 ms, tokens/sec: 147077.53
+step 28, loss: 8.033788681030273, norm: 0.9142,  time: 110.92 ms, tokens/sec: 147714.57
+step 29, loss: 7.881025314331055, norm: 0.9233,  time: 111.30 ms, tokens/sec: 147208.91
+step 30, loss: 7.805019378662109, norm: 0.9097,  time: 110.56 ms, tokens/sec: 148195.58
+step 31, loss: 7.720066070556641, norm: 0.8804,  time: 111.00 ms, tokens/sec: 147608.28
+step 32, loss: 7.625791549682617, norm: 0.8783,  time: 111.00 ms, tokens/sec: 147602.89
+step 33, loss: 7.561557769775391, norm: 0.8611,  time: 111.15 ms, tokens/sec: 147405.32
+step 34, loss: 7.530725479125977, norm: 0.8210,  time: 111.21 ms, tokens/sec: 147323.79
+step 35, loss: 7.414375305175781, norm: 0.8317,  time: 111.09 ms, tokens/sec: 147488.84
+step 36, loss: 7.356660842895508, norm: 0.8021,  time: 110.33 ms, tokens/sec: 148504.63
+step 37, loss: 7.293796539306641, norm: 0.7712,  time: 111.02 ms, tokens/sec: 147576.26
+step 38, loss: 7.238212585449219, norm: 0.7527,  time: 110.63 ms, tokens/sec: 148096.26
+step 39, loss: 7.126079559326172, norm: 0.7718,  time: 110.92 ms, tokens/sec: 147703.46
+step 40, loss: 7.093967437744141, norm: 0.7339,  time: 111.15 ms, tokens/sec: 147402.16
+step 41, loss: 6.900838851928711, norm: 0.7817,  time: 111.18 ms, tokens/sec: 147368.65
+step 42, loss: 6.881086349487305, norm: 0.7029,  time: 110.58 ms, tokens/sec: 148168.42
+step 43, loss: 6.803134918212891, norm: 0.6877,  time: 111.19 ms, tokens/sec: 147351.27
+step 44, loss: 6.733644485473633, norm: 0.6898,  time: 110.77 ms, tokens/sec: 147915.51
+step 45, loss: 6.862754821777344, norm: 0.6133,  time: 111.02 ms, tokens/sec: 147576.90
+step 46, loss: 6.878885269165039, norm: 0.5581,  time: 110.63 ms, tokens/sec: 148091.79
+step 47, loss: 6.74720573425293, norm: 0.5526,  time: 110.85 ms, tokens/sec: 147800.67
+step 48, loss: 6.703516006469727, norm: 0.5820,  time: 111.22 ms, tokens/sec: 147318.11
+step 49, loss: 6.559877395629883, norm: 0.5682,  time: 111.23 ms, tokens/sec: 147298.84
+```
