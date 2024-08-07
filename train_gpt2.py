@@ -292,11 +292,11 @@ elif hasattr(torch, "mps") and torch.backends.mps.is_available():
     torch.mps.manual_seed(1337)
 
 # get a data batch
-train_loader = DataLoaderLite(16,1024)
+train_loader = DataLoaderLite(B=16,T=1024)
 torch.set_float32_matmul_precision('high')
 # the exponent sets the precision of the matrix multiplication
 
-model = GPT(GPTConfig())
+model = GPT(GPTConfig(vocab_size=50304)) # 50304 i
 model.to(device)
 model = torch.compile(model)
 # Speedup mainly comes from reducing python overhead and GPU read/write overhead
