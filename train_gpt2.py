@@ -56,16 +56,27 @@ class CausalSelfAttention(nn.Module):
         # att = F.softmax(att, dim=-1)
         # y = att @ v  # (B, nh, T, T) x (B, nh, T, hs) -> (B, nh, T, hs)
         y = F.scaled_dot_product_attention(q, k, v, is_causal=True)
-        
+
         y = (
             y.transpose(1, 2).contiguous().view(B, T, C)
         )  # re-assemble all head outputs side by side
         y = self.c_proj(y)
         return y
-    
+
+
 class TanhGELU(nn.Module):
     def forward(self, input):
-        return 0.5 * input * (1.0 + torch.tanh(math.sqrt(2.0 / math.pi) * (input + 0.044715 * torch.pow(input, 3.0))))
+        return (
+            0.5
+            * input
+            * (
+                1.0
+                + torch.tanh(
+                    math.sqrt(2.0 / math.pi)
+                    * (input + 0.044715 * torch.pow(input, 3.0))
+                )
+            )
+        )
 
 
 class MLP(nn.Module):
@@ -136,7 +147,9 @@ class GPT(nn.Module):
         if isinstance(module, nn.Linear):
             std = 0.02
             if hasattr(module, "NANOGPT_SCALE_INIT"):
-                std *= (2 * self.config.n_layers) ** -0.5 # multiply by 2 comes from the fact that we have two sub-layers in the block(attention and mlp)
+                std *= (
+                    2 * self.config.n_layers
+                ) ** -0.5  # multiply by 2 comes from the fact that we have two sub-layers in the block(attention and mlp)
             torch.nn.init.normal_(module.weight, mean=0.0, std=std)
             if module.bias is not None:
                 torch.nn.init.zeros_(module.bias)  # set bias to zero
@@ -292,18 +305,18 @@ elif hasattr(torch, "mps") and torch.backends.mps.is_available():
     torch.mps.manual_seed(1337)
 
 # get a data batch
-train_loader = DataLoaderLite(B=16,T=1024)
-torch.set_float32_matmul_precision('high')
+train_loader = DataLoaderLite(B=16, T=1024)
+torch.set_float32_matmul_precision("high")
 # the exponent sets the precision of the matrix multiplication
 
-model = GPT(GPTConfig(vocab_size=50304)) # 50304 i
+model = GPT(GPTConfig(vocab_size=50304))  # 50304 i
 model.to(device)
 model = torch.compile(model)
 # Speedup mainly comes from reducing python overhead and GPU read/write overhead
 # logits, loss = model(x, y)
 
 # print(loss)  # (B, T, vocab_size) = (4, 32, 50257)
-optimizer = torch.optim.AdamW(model.parameters(), lr=9e-3)
+optimizer = torch.optim.AdamW(model.parameters(), lr=9e-3, betas=(0.9, 0.95), eps=1e-8)
 for i in range(50):
     t0 = time.time()
     x, y = train_loader.next_batch()
@@ -313,13 +326,18 @@ for i in range(50):
         logits, loss = model(x, y)
         # import code; code.interact(local=locals())
     loss.backward()
+    norm = torch.nn.utils.clip_grad_norm_(
+        model.parameters(), 1.0
+    )  # clip the gradients to prevent explosion
     optimizer.step()
-    torch.cuda.synchronize() # wait for the kernel to finish before measuring the time
+    torch.cuda.synchronize()  # wait for the kernel to finish before measuring the time
     t1 = time.time()
-    dt = (t1 - t0) * 1000 # in milliseconds
-    tokens_per_sec = train_loader.B * train_loader.T / (t1 - t0) # number of tokens per second processed
+    dt = (t1 - t0) * 1000  # in milliseconds
+    tokens_per_sec = (
+        train_loader.B * train_loader.T / (t1 - t0)
+    )  # number of tokens per second processed
     print(
-        f"step {i}, loss: {loss.item()}, time: {dt:.2f} ms, tokens/sec: {tokens_per_sec:.2f}"
+        f"step {i}, loss: {loss.item()}, norm: {norm:.4f},  time: {dt:.2f} ms, tokens/sec: {tokens_per_sec:.2f}"
     )  # loss.item() converts the loss tensor to a scalar float 1D -> float internally in pytorch
 
 import sys

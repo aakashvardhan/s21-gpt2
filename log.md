@@ -531,4 +531,66 @@ step 49, loss: 6.530099868774414, time: 126.60 ms, tokens/sec: 129419.84
 - This is 33% faster than the previous model training without Flash Attention
 
 
-- Batch size at the power of 2 is recommended for the model training as cuda is optimized for power of 2 batch sizes
+- any number at the power of 2 is recommended for the model training as cuda is optimized for that. Including the batch size, sequence length, and hidden size.
+
+
+Overriding the vocab size to 50304 as it is at the power of 2
+
+```
+sing device: cuda
+loaded 338025 tokens
+1 epoch = 20 batches
+step 0, loss: 10.826412200927734, time: 24504.52 ms, tokens/sec: 668.61
+step 1, loss: 10.751480102539062, time: 111.74 ms, tokens/sec: 146627.83
+step 2, loss: 10.686775207519531, time: 110.42 ms, tokens/sec: 148383.74
+step 3, loss: 10.61892318725586, time: 110.76 ms, tokens/sec: 147923.16
+step 4, loss: 10.536689758300781, time: 110.86 ms, tokens/sec: 147787.95
+step 5, loss: 10.460895538330078, time: 110.65 ms, tokens/sec: 148074.88
+step 6, loss: 10.367889404296875, time: 110.60 ms, tokens/sec: 148143.51
+step 7, loss: 10.266380310058594, time: 110.99 ms, tokens/sec: 147611.77
+step 8, loss: 10.181755065917969, time: 110.55 ms, tokens/sec: 148201.33
+step 9, loss: 10.069171905517578, time: 110.57 ms, tokens/sec: 148177.05
+step 10, loss: 9.966400146484375, time: 110.87 ms, tokens/sec: 147773.97
+step 11, loss: 9.851570129394531, time: 110.70 ms, tokens/sec: 148000.25
+step 12, loss: 9.74478530883789, time: 110.75 ms, tokens/sec: 147938.12
+step 13, loss: 9.654521942138672, time: 110.82 ms, tokens/sec: 147837.55
+step 14, loss: 9.56020736694336, time: 111.04 ms, tokens/sec: 147549.33
+step 15, loss: 9.448078155517578, time: 111.01 ms, tokens/sec: 147587.99
+step 16, loss: 9.349971771240234, time: 111.10 ms, tokens/sec: 147472.70
+step 17, loss: 9.237506866455078, time: 111.11 ms, tokens/sec: 147452.77
+step 18, loss: 9.140865325927734, time: 128.35 ms, tokens/sec: 127650.46
+step 19, loss: 9.00937271118164, time: 112.70 ms, tokens/sec: 145381.74
+step 20, loss: 8.83041000366211, time: 110.52 ms, tokens/sec: 148240.66
+step 21, loss: 8.65383529663086, time: 111.21 ms, tokens/sec: 147322.84
+step 22, loss: 8.554647445678711, time: 110.65 ms, tokens/sec: 148068.81
+step 23, loss: 8.435354232788086, time: 110.87 ms, tokens/sec: 147773.97
+step 24, loss: 8.316843032836914, time: 110.63 ms, tokens/sec: 148099.45
+step 25, loss: 8.274700164794922, time: 110.72 ms, tokens/sec: 147974.76
+step 26, loss: 8.176961898803711, time: 111.40 ms, tokens/sec: 147075.33
+step 27, loss: 8.029972076416016, time: 110.49 ms, tokens/sec: 148279.68
+step 28, loss: 7.945899963378906, time: 110.48 ms, tokens/sec: 148304.00
+step 29, loss: 7.786319732666016, time: 110.72 ms, tokens/sec: 147983.04
+step 30, loss: 7.708597183227539, time: 110.67 ms, tokens/sec: 148049.67
+step 31, loss: 7.617708206176758, time: 110.81 ms, tokens/sec: 147851.86
+step 32, loss: 7.534358978271484, time: 110.93 ms, tokens/sec: 147701.87
+step 33, loss: 7.451999664306641, time: 110.54 ms, tokens/sec: 148224.03
+step 34, loss: 7.433612823486328, time: 110.61 ms, tokens/sec: 148125.31
+step 35, loss: 7.308221817016602, time: 110.89 ms, tokens/sec: 147749.19
+step 36, loss: 7.245744705200195, time: 110.54 ms, tokens/sec: 148214.12
+step 37, loss: 7.190338134765625, time: 110.36 ms, tokens/sec: 148460.35
+step 38, loss: 7.132726669311523, time: 110.66 ms, tokens/sec: 148058.29
+step 39, loss: 7.008186340332031, time: 111.36 ms, tokens/sec: 147128.86
+step 40, loss: 6.993412017822266, time: 110.95 ms, tokens/sec: 147664.74
+step 41, loss: 6.795404434204102, time: 110.69 ms, tokens/sec: 148023.20
+step 42, loss: 6.790424346923828, time: 110.42 ms, tokens/sec: 148377.01
+step 43, loss: 6.722799301147461, time: 111.18 ms, tokens/sec: 147368.65
+step 44, loss: 6.65477180480957, time: 110.61 ms, tokens/sec: 148117.96
+step 45, loss: 6.778308868408203, time: 110.73 ms, tokens/sec: 147961.37
+step 46, loss: 6.809177398681641, time: 111.15 ms, tokens/sec: 147403.11
+step 47, loss: 6.682546615600586, time: 111.22 ms, tokens/sec: 147316.53
+step 48, loss: 6.640913009643555, time: 111.20 ms, tokens/sec: 147338.95
+step 49, loss: 6.501094818115234, time: 111.25 ms, tokens/sec: 147274.54
+```
+
+
+Extra memory is required for the model training with the increased vocab size. The model training time is reduced by 11% compared to the previous model training with Flash Attention.
