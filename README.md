@@ -1,40 +1,55 @@
 
+# Tiny Shakespeare GPT-2
 
 
+## Introduction
 
-Strategies:
+This is a tiny GPT-2 model trained on Shakespeare's works. It is a smaller version of the original GPT-2 model, with 124M parameters, trained on a mixture of Shakespeare's plays and sonnets. This is adapted from Andrej Karpathy's [nanoGPT](https://github.com/karpathy/nanoGPT/tree/master) and youtube video [here](https://youtu.be/l8pRSuU81PU?si=ta5pJsj1eeQR5-Dm).
 
+## Roadmap
 
-Flash Attention is an innovative algorithm designed to improve the efficiency of transformer models, particularly large language models (LLMs), by optimizing the attention mechanism[1][2]. Here are the key aspects of Flash Attention:
+### Model Architecture Optimizations
 
-1. Purpose:
-- Reduces memory bottleneck in transformer models
-- Improves training speed and inference latency
-- Enables scaling of transformer-based models more efficiently[1][2]
+- [x] Overfit a single batch of data
+  - Ensures the model can learn from a small dataset before scaling up
+- [x] Added Weight Tying/Sharing
+  - The embedding layer and the final linear layer share weights, reducing parameters
+- [x] Override the vocab size to 50304
+  - Aligns with power of 2 for potential performance benefits
 
-2. How it works:
-- Optimizes data movement between High Bandwidth Memory (HBM) and on-chip SRAM
-- Loads keys, queries, and values once, instead of repeatedly
-- Fuses operations of the attention mechanism
-- Uses tiling to divide data into smaller blocks for parallel processing[1][2]
+### Data Handling and Processing
 
-3. Key strategies:
-- Kernel fusion: Combines multiple computation steps into a single operation
-- Tiling: Partitions input data into smaller blocks for parallel processing
-- Minimizes redundant reads and writes between memory types[2]
+- [x] Created a DataloaderLite Class
+  - Custom dataloader for efficient data feeding to the model
 
-4. Benefits:
-- Provides 15% efficiency improvement in wall-clock speed without approximation
-- Reduces both model training time and inference latency
-- Enables faster responses in LLM applications[2][3]
+### Training Optimizations
 
-5. Implementation:
-- Breaks the attention matrix into blocks and computes partial softmax for each block
-- Combines partial results to obtain the correct softmax
-- Achieves O(N*N*d*d/M) complexity, which is more efficient than standard attention's O(N*N) HBM access[3]
+- [x] Using model initialization with std = 0.02 and residual pathways init
+  - Improves training stability and convergence
+- [x] Setting the model to use tf32 precision at high
+  - Balances speed and accuracy for NVIDIA GPUs
+- [x] Switched to CUDA and trained the model with bf16 precision
+  - Further optimizes training speed on compatible hardware
+- [x] Added torch.compile() to speed up model training
+  - JIT compilation for faster execution
+- [x] Added Flash Attention to the model
+  - Addresses memory bottleneck, improving efficiency for large models
 
-6. Adoption:
-- Supported by various open-source models like Llama-2 and Mistral
-- Can be enabled in tools like Axolotl for fine-tuning models[2]
+### Optimizer and Learning Rate Adjustments
 
-Flash Attention represents a significant advancement in optimizing transformer models, addressing the memory bottleneck issue and enabling more efficient scaling of LLMs. Its adoption has been rapid due to its ability to improve performance without sacrificing accuracy.
+- [x] Modified AdamW beta parameters to 0.9 and 0.95 and eps to 1e-8
+  - Fine-tuned optimizer settings for better convergence
+- [x] Added gradient clipping of 1.0 to the model
+  - Prevents exploding gradients during training
+- [x] Added a learning rate scheduler to the model: warmup + cosine decay
+  - Improves training stability and final model performance
+- [x] Added Fused implementation of AdamW
+  - Weight decay for 2D tensors (matmul + embedding), 1D tensors without weight decay
+  - Optimizes memory usage and computation
+
+### Performance Monitoring
+
+- [x] Calculating time taken to train the model
+  - Synchronize GPU to wait for model to finish training at tf32 precision
+- [x] Calculating the number of tokens processed per second
+  - Measures training efficiency and throughput

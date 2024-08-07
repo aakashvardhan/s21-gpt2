@@ -784,7 +784,7 @@ step 0049, loss: 5.888381, norm: 0.648847222328186, lr: 6.0832e-05, time: 492.5m
 ```
 
 
-Final model training with 5000 steps
+Final model training with 5000 steps (added configure_optimizer method for weight decaying 2d tensor(matmul + embedding) while keeping 1d tensors (bias) un-decayed. Fused AdamW is used for the optimizer. Fused implementation of AdamW is used to reduce the number of kernel launches and memory transfers. This implementation is faster than the non-fused implementation.)
 
 ```
 step 0001, loss: 9.502789, norm: 10.649774551391602, lr: 1.2000e-04, time: 449.89ms, tokens/sec: 36418.0
