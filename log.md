@@ -784,6 +784,6 @@ step 0049, loss: 5.888381, norm: 0.648847222328186, lr: 6.0832e-05, time: 492.5m
 ```
 
 
-Final model training with 4000 steps
+Final model training with 5000 steps
 
 ```
